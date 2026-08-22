@@ -30,10 +30,11 @@ void main(List<String> args) {
   // https://dart.dev/language/
 
   // Palavra reservada var para declarar uma variável com tipo inferido
-  var tipoinferido = 1;
+  var Idadeinferido = 1;
 
   // Aceita qualquer coisa
   dynamic idadeDynamic;
+  idadeDynamic = 11;
   idadeDynamic = "Onze";
 
   // Object é uma classe base de todos os objetos
@@ -42,10 +43,8 @@ void main(List<String> args) {
   Object IdadeObject;
   IdadeObject = 15;
   IdadeObject = "Quinze";
-  IdadeObject = new Int();
+  IdadeObject = new int();
 
-  Object idade_object_snack_case;
-  Object idadeObjectCamelCase;
 
   print(idadeDynamic); 
 }

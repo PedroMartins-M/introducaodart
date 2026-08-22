@@ -17,7 +17,7 @@ void main(List<String> args) {
 
 
   }
+  else {
+    print("Numero inteiro inválido");
+}
 }  
-// else {
-//     print("Numero inteiro inválido");
-// }
