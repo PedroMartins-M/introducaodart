@@ -1,5 +1,8 @@
-import 'package:consultacep/consultacep.dart' as consultacep;
+import 'package:consultacep/views/endereco-view.dart';
 
-void main(List<String> arguments) {
-  print('Hello world: ${consultacep.calculate()}!');
+void main(List<String> arguments) async {
+
+  final view = EnderecoView();
+  view.iniciar();
 }
+
