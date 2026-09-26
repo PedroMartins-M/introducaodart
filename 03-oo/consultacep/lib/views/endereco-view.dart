@@ -15,8 +15,6 @@ class EnderecoView {
 
     print("Informe o CEP (formato 00000-000)");
     String? cep = stdin.readLineSync();
-    //cep = cep!.replaceAll(RegExp('r(0-9)'), '');
-
     try {
       Endereco endereco = await enderecoController.buscarEndereco(
         enderecoController.validaCEP(cep),

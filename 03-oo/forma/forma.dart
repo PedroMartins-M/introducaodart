@@ -1,4 +1,4 @@
-import '../../enum.dart';
+import 'enum.dart';
 
 abstract class Forma {
   tpForma tipoForma;
