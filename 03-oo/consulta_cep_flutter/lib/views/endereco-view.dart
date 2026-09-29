@@ -3,30 +3,23 @@ import 'package:consulta_cep_flutter/models/endereco.dart';
 import '../controllers/endereco-controller.dart';
 import 'package:flutter/material.dart';
 
-class EnderecoView extends StatefulWidget{
-
+class EnderecoView extends StatefulWidget {
   const EnderecoView({super.key});
 
   @override
   State<StatefulWidget> createState() => _EnderecoViewState();
 }
 
-class _EnderecoViewState extends State<EnderecoView>{
-
+class _EnderecoViewState extends State<EnderecoView> {
   final TextEditingController cepController = TextEditingController();
-
   final EnderecoController enderecoController = EnderecoController();
 
   Endereco? endereco;
-
   String? mensagemErro;
-
   bool carregando = false;
 
-  Future<void> consultarCEP() async{
-
-    try{
-
+  Future<void> consultarCEP() async {
+    try {
       setState(() {
         carregando = true;
         mensagemErro = null;
@@ -40,44 +33,61 @@ class _EnderecoViewState extends State<EnderecoView>{
       setState(() {
         this.endereco = endereco;
       });
-
     } catch (e) {
-        setState(() {
-          mensagemErro = e.toString();
-          endereco = null;
-
-        });
-    } finally{
+      setState(() {
+        mensagemErro = e.toString();
+        endereco = null;
+      });
+    } finally {
       setState(() {
         carregando = false;
       });
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Consulta CEP'),
+        title: const Text('ConsultaCEP'),
+        centerTitle: true, // Centraliza o texto
+        backgroundColor: Colors.purple.shade900, // Cor do fundo
+        foregroundColor: Colors.white, // Cor do texto e dos ícones
+        elevation: 4.0, // Altura da sombra da barra
+        titleTextStyle: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 1.1,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
 
         child: Column(
-
           crossAxisAlignment: CrossAxisAlignment.stretch,
 
           children: [
             TextField(
-
               controller: cepController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'CEP',
                 hintText: '00000-000',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
+                // Exibe o ícone de limpar quando o texto não estiver vazio
+                suffixIcon: cepController.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          cepController.clear(); // Limpa o texto do campo
+                          setState(() {
+                            endereco =
+                                null; // Opcional: limpa os resultados exibidos na tela
+                            mensagemErro = null;
+                          });
+                        },
+                      )
+                    : null,
               ),
             ),
 
@@ -85,51 +95,58 @@ class _EnderecoViewState extends State<EnderecoView>{
 
             ElevatedButton(
               onPressed: consultarCEP,
-             child: const Text('Consultar')
-             ),
+              child: const Text('Consultar'),
+            ),
 
-             if( endereco != null) ...[
-              const SizedBox(height: 24,),
+            if (endereco != null) ...[
+              const SizedBox(height: 24),
 
-              Text(
-                'logradouro: ${endereco!.logradouro}'
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                margin: const EdgeInsets.symmetric(vertical: 8.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[20],
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.grey.shade200),
+                ),
+                child: Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start, // Alinha o texto à esquerda
+                  mainAxisSize:
+                      MainAxisSize.min, // Ocupa apenas o espaço necessário
+                  children: [
+                    Text(
+                      'Logradouro: ${endereco!.logradouro}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4.0), // Espaço entre as linhas
+                    Text('Bairro: ${endereco!.bairro}'),
+                    const SizedBox(height: 4.0),
+                    Text('Cidade: ${endereco!.localidade}'),
+                    const SizedBox(height: 4.0),
+                    Text('UF: ${endereco!.uf}'),
+                  ],
+                ),
               ),
+            ],
 
-              Text(
-                'Bairro: ${endereco!.bairro}'
-              ),
+            if (mensagemErro != null) ...[
+              const SizedBox(height: 16),
 
-              Text(
-                'Cidade: ${endereco!.localidade}'
-              ),
+              Text(mensagemErro!, style: const TextStyle(color: Colors.red)),
+            ],
 
-              Text(
-                'UF: ${endereco!.uf}'
-              ),
-             ],
+            if (carregando) ...[
+              SizedBox(height: 24),
 
-             if(mensagemErro != null) ...[
-              const SizedBox(height: 16,),
-
-              Text(
-                mensagemErro!,
-                  style: const TextStyle(color: Colors.red),
-              )
-             ],
-
-             if(carregando) ...[
-
-            SizedBox(height: 24,),
-
-             const Center(
-              child: CircularProgressIndicator(),
-             )
-            ]
-             
+              const Center(child: CircularProgressIndicator()),
+            ],
           ],
-        ), 
-      )
+        ),
+      ),
     );
   }
-
 }
